@@ -15,9 +15,14 @@ class Student:
 ##########################################################
 # Main 
 ##########################################################
-student1 = Student(str(input("Enter a first name: ")), input("Enter last name: "), input("Enter Gender: "), float(input("Enter GPA: ")), int(input("Enter age: ")))
-# arrStudents = []
-# for i in range(4):
-# 	arrStudents.append(Student(input("Enter a first name: "), input("Enter last name: "), input("Enter Gender: "), float(input("Enter GPA: ")), int(input("Enter age: "))))
-# Student.displayCount()
-# print("Male students: %d" % arrStudents.count("Male"))
+# student1 = Student(str(input("Enter a first name: ")), input("Enter last name: "), input("Enter Gender: "), float(input("Enter GPA: ")), int(input("Enter age: ")))
+arrStudents = []
+for i in range(4):
+	strFirstName = input("Enter a first name: ")
+	strLastName = input("Enter last name: ")
+	strGender = input("Enter Gender: ")
+	dblGPA = float(input("Enter GPA: "))
+	intAge = int(input("Enter age: "))
+	arrStudents.append(Student(strFirstName, strLastName, strGender, dblGPA, intAge))
+Student.displayCount()
+print("Male students: %d" % arrStudents.count("Male"))
