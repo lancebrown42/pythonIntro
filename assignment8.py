@@ -9,10 +9,16 @@ class Student:
 		self.dblGPA = dblGPA
 		self.intAge = intAge
 		Student.intStudentCount += 1
+		if strGender == "M":
+			Student.intMaleCount += 1
+		elif strGender == "F":
+			Student.intFemaleCount += 1
 	def displayStudent(self):
 		print("Name: %s %s, Gender: %s, GPA: %0.1f, Age: %d" % (strFirstName, strLastName, strGender, dblGPA, intAge))
 	def displayCount():
 		print("Total number of students: %d" % Student.intStudentCount)
+	def displayGenders():
+		print("Number of males: %d \nNumber of females: %d" % (Student.intMaleCount, Student.intFemaleCount))
 
 
 def validateGender(strGender):
@@ -20,6 +26,23 @@ def validateGender(strGender):
 		validateGender((input("Please enter 'male' or 'female': ")).upper())
 	else:
 		return strGender[0]
+def validateGPA(dblGPA):
+	try:
+		dblGPA = float(dblGPA)
+	except ValueError:
+		dblGPA = validateGPA(input("Enter a numerical value: "))
+	if dblGPA < 0 or dblGPA > 4:
+		dblGPA = validateGPA(input("Enter a valid GPA from 0-4: "))
+	else:
+		return dblGPA
+def validateAge(intAge):
+	try:
+		intAge = int(intAge)
+	except ValueError:
+		intAge = validateAge(input("Enter a numerical value: "))
+	if intAge <= 0 or intAge > 200:
+		intAge = validateAge(input("Enter a valid age: "))
+	
 
 ##########################################################
 # Main 
@@ -30,10 +53,8 @@ while len(arrStudents) < 2:
 	strFirstName = input("Enter a first name: ")
 	strLastName = input("Enter last name: ")
 	strGender = validateGender((input("Enter Gender: ")).upper())
-	dblGPA = float(input("Enter GPA: "))
-	intAge = int(input("Enter age: "))
+	dblGPA = validateGPA(input("Enter GPA: "))
+	intAge = validateAge(input("Enter age: "))
 	arrStudents.append(Student(strFirstName, strLastName, strGender, dblGPA, intAge))
 Student.displayCount()
-print(arrStudents[0])
-print("Male students: %d" % arrStudents.count("M"))
-print("Female students: %d" % arrStudents.count("F"))
+Student.displayGenders()
