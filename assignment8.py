@@ -1,5 +1,7 @@
 class Student:
 	intStudentCount = int(0)
+	intMaleCount = int(0)
+	intFemaleCount = int(0)
 	def __init__(self, strFirstName, strLastName, strGender, dblGPA, intAge):
 		self.strFirstName = strFirstName
 		self.strLastName = strLastName
@@ -32,6 +34,6 @@ while len(arrStudents) < 2:
 	intAge = int(input("Enter age: "))
 	arrStudents.append(Student(strFirstName, strLastName, strGender, dblGPA, intAge))
 Student.displayCount()
-print(arrStudents)
+print(arrStudents[0])
 print("Male students: %d" % arrStudents.count("M"))
 print("Female students: %d" % arrStudents.count("F"))
