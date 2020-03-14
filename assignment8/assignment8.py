@@ -12,13 +12,6 @@ class Student:
 	def displayCount():
 		print("Total number of students: %d" % Student.intStudentCount)
 
-
-def validateGender(strGender):
-	if strGender != "MALE" and strGender != "FEMALE" and strGender != "M" and strGender != "F":
-		validateGender(upper(input("Please enter 'male' or 'female': ")))
-	else:
-		return strGender[0]
-
 ##########################################################
 # Main 
 ##########################################################
@@ -27,10 +20,9 @@ arrStudents = []
 while len(arrStudents) < 2:
 	strFirstName = input("Enter a first name: ")
 	strLastName = input("Enter last name: ")
-	strGender = validateGender(upper(input("Enter Gender: ")))
+	strGender = input("Enter Gender: ")
 	dblGPA = float(input("Enter GPA: "))
 	intAge = int(input("Enter age: "))
 	arrStudents.append(Student(strFirstName, strLastName, strGender, dblGPA, intAge))
 Student.displayCount()
-print("Male students: %d" % arrStudents.count("M"))
-print("Female students: %d" % arrStudents.count("F"))
+print("Male students: %d" % arrStudents.count("Male"))
