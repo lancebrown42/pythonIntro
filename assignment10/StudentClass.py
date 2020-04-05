@@ -1,7 +1,7 @@
 ##########################################
-#Assignment 9
+#Assignment 10
 #Lance Brown
-# 3/21/20
+# 3/31/20
 #########################################
 from PersonClass import Person as Person
 class Student(Person):
@@ -25,5 +25,24 @@ class Student(Person):
         Student.stuFemaleCount += 1
         Student.stuFemaleAgeTotal += age
       Student.stuGPATotal += GPA
+    @property
+    def GPA(self):
+      return self._GPA
+    @GPA.setter
+    def GPA(self, GPA):
+      if GPA > 4:
+        raise Exception("GPA out of range, must be less than 4.0")
+      elif GPA < 1:
+        raise Exception("GPA out of range, must be positive")
+      else:
+        try:
+          self._GPA = float(GPA)
+        except Exception as e:
+          raise e
+        
+
+    
+    
+    
     def displayTotal(self):
         print("Number of males: %d \nNumber of females: %d" % (Student.intMaleCount, Student.intFemaleCount))

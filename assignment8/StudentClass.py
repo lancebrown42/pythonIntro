@@ -1,3 +1,7 @@
+##########################################################
+# Lance Brown
+# Assignment 8
+##########################################################
 class Student:
 	intStudentCount = int(0)
 	intMaleCount = int(0)
