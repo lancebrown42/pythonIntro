@@ -1,0 +1,19 @@
+﻿Lance Brown
+Bike Rental plan
+04/20/20
+
+Customer class has following properties:
+    • name, etc
+    • rental type
+And the following methods:
+    • View bikes
+    • request bikes
+Shop has following properties:
+    • inventory
+    • rental cost
+
+and the following methods:
+    • check inventory
+    • rent bike
+    • return bike
+    • bill customer
