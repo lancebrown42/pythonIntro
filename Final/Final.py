@@ -1,12 +1,13 @@
-
-class Customer():
-	"""Class defining customer objs"""
-	
-	def __init__(self, firstName, lastName, SSN):
-            """constructor to instantiate customer object"""
+class Account():
+	#Class defining account objs
+	def __init__(self, firstName, lastName, SSN, balance=0):
+		"""constructor to instantiate account object"""
+		
 		self.firstName = firstName
 		self.lastName = lastName
 		self.SSN = SSN
+		if balance != 0:
+			self.balace = balance
 
 	@property
 	def firstName(self):
@@ -28,19 +29,11 @@ class Customer():
 		self._lastName = lastName
 	@SSN.setter
 	def SSN(self, SSN):
-		self._SSN = SSN
-        #overrides string function to return useful data
-	def __str__(self):
-		return self._firstName + " " + self._lastName + " " + self._SSN
-
-class Account(Customer):
-	#Class defining account objs
-	def __init__(self, firstName, lastName, SSN, balance=0):
-        """constructor to instantiate account object"""
-        """inherit the Customer init"""
-		super(Account, self).__init__(firstName, lastName, SSN)
-		if balance != 0:
-			self.balace = balance
+		#validate input
+		if len(SSN) != 9:
+			raise ValueError("Social security number must be in XXXXXXXXX format")
+		else:
+			self._SSN = SSN
 
 	@property
 	def balance(self):
@@ -49,7 +42,7 @@ class Account(Customer):
 	def balance(self, amt):
 		self._balance = amt
 	def checkBalance(self):
-		print(str(self.__name__) + ": $" + str(self._balance))
+		print(str(self.__class__.__name__) + ": $" + str(self._balance))
 	def withdraw(self, amt):
 		if self.validateMoney(amt):
 			self._balance-=amt
@@ -79,15 +72,15 @@ class Account(Customer):
 class Savings(Account):
 	"""defines savings"""
 	def __init__(self, firstName, lastName, SSN, balance = 0):
-            """constructor to instantiate savings account object"""
+		"""constructor to instantiate savings account object"""
 		if balance < 500:
 			raise Exception("Minimum deposit is $500")
 			print("Account not opened")
 			return
 		else:
 			self.balance = balance
-		    """inherit Account class init"""
-		super(Savings, self).__init__(firstName, lastName, SSN, balance)
+			"""inherit Account class init"""
+		super().__init__(firstName, lastName, SSN, balance)
 	def __str__(self):
 		return(("{} {}'s savings account").format(self._firstName, self._lastName))
 	def deposit(self, amt):
@@ -99,7 +92,7 @@ class Savings(Account):
 				self._balance += amt
 class Checking(Account):
 	def __init__(self, firstName, lastName, SSN, balance = 0):
-		super(Checking, self).__init__(firstName, lastName, SSN, balance)
+		super().__init__(firstName, lastName, SSN, balance)
 		self.balance = balance
 	def __str__(self):
 		return(("{} {}'s checking account").format(self._firstName, self._lastName))
@@ -114,8 +107,6 @@ class Checking(Account):
 		
 
 ##Main
-john = Customer("John", "Doe", "123456789")
-print(john)
 savings1 = Savings("John", "Doe", "123456789", 600)
 checking1 = Checking("John", "Doe", "123456789", 600)
 print(savings1)
