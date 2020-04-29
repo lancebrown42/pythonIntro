@@ -1,8 +1,9 @@
 
 class Customer():
-	#Class defining customer objs
+	"""Class defining customer objs"""
 	
 	def __init__(self, firstName, lastName, SSN):
+            """constructor to instantiate customer object"""
 		self.firstName = firstName
 		self.lastName = lastName
 		self.SSN = SSN
@@ -28,25 +29,15 @@ class Customer():
 	@SSN.setter
 	def SSN(self, SSN):
 		self._SSN = SSN
-	# @accounts.setter
-	# def accounts(self, account):
-	# 	if account:
-	# 		self._accounts.append(account)
-	# 	else:
-	# 		self._accounts = self.accounts
+        #overrides string function to return useful data
 	def __str__(self):
 		return self._firstName + " " + self._lastName + " " + self._SSN
-	# def	addAccount(self, account):
-	# 	self.accounts(account)
-	# 	print(account)
-	# def closeAccount(self, accountID):
-	# 	try:
-	# 		self.accounts.remove(accountID)
-	# 	except ValueError as e:
-	# 		raise("Account not found" + e)
+
 class Account(Customer):
-	"""Class defining account objs"""
+	#Class defining account objs
 	def __init__(self, firstName, lastName, SSN, balance=0):
+        """constructor to instantiate account object"""
+        """inherit the Customer init"""
 		super(Account, self).__init__(firstName, lastName, SSN)
 		if balance != 0:
 			self.balace = balance
@@ -88,12 +79,14 @@ class Account(Customer):
 class Savings(Account):
 	"""defines savings"""
 	def __init__(self, firstName, lastName, SSN, balance = 0):
+            """constructor to instantiate savings account object"""
 		if balance < 500:
 			raise Exception("Minimum deposit is $500")
 			print("Account not opened")
 			return
 		else:
 			self.balance = balance
+		    """inherit Account class init"""
 		super(Savings, self).__init__(firstName, lastName, SSN, balance)
 	def __str__(self):
 		return(("{} {}'s savings account").format(self._firstName, self._lastName))
