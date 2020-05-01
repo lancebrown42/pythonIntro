@@ -1,16 +1,28 @@
+#################################################
+#Lance Brown
+#Final Project
+#4/25/20
+#################################################
+
 class Account():
-	#Class defining account objects
-	_customers = {}
+	"""Class defining account objects"""
+
+
+	_customers = {} #class dict to store accounts by customer ssn
 	#takes customer first name, last name, social and optional starting balance
 	def __init__(self, firstName, lastName, SSN, balance=0):
 		"""constructor to instantiate account object"""
+
 		
 		self.firstName = firstName
 		self.lastName = lastName
 		self.SSN = SSN
 		self.balance = balance
+		#initialize customer in dict if new, or update if existing
 		Account._customers.setdefault(SSN,[]).append(self)
-		
+	
+	#Account props	
+	##################################
 	@property
 	def firstName(self):
 		return self._firstName
@@ -27,6 +39,13 @@ class Account():
 	def accounts(self):
 		return self._accounts
 	
+	@property
+	def balance(self):
+		return self._balance
+
+	#setters
+	################################
+
 	@firstName.setter
 	def firstName(self, firstName):
 		self._firstName = firstName
@@ -43,22 +62,25 @@ class Account():
 		else:
 			self._SSN = SSN
 
-	@property
-	def balance(self):
-		return self._balance
-
 	@balance.setter
 	def balance(self, amt):
 		self._balance = amt
 
+	#getters
+	#############################
 	@balance.getter
 	def checkBalance(self):
 		return(self._balance)
 
+	#methods
+	#############################
+
+	#deduct funds from account
 	def withdraw(self, amt):
 		if self.validateMoney(amt):
 			self._balance-=amt
 
+	#add funds to account
 	def deposit(self, amt):
 		if self.validateMoney(amt):
 			self._balance+=amt
@@ -83,8 +105,11 @@ class Account():
 		if self.validateMoney(amt):
 			self.withdraw(amt)
 			target.deposit(amt)
+	
+	#get the total balance for all accounts for a specified customer
 	def totalBalance(SSN):
 		total = 0
+		#get a list of all accounts specified customer has
 		accounts = Account._customers.get(SSN)
 		for account in accounts:
 			total += float(account.checkBalance)
@@ -92,8 +117,8 @@ class Account():
 
 
 class Savings(Account):
-	"""defines savings account object"""
-	#inherits Account class, polymorphing deposit, withdraw and instantiation to handle account minimums
+	"""defines savings account object
+	inherits Account class, polymorphing deposit, withdraw and instantiation to handle account minimums"""
 	def __init__(self, firstName, lastName, SSN, balance = 0):
 		"""constructor to instantiate savings account object"""
 		if balance < 500:
@@ -105,13 +130,14 @@ class Savings(Account):
 			"""inherit Account class init"""
 		super().__init__(firstName, lastName, SSN, balance)
 
-
+	#override str to something almost meaningful
 	def __str__(self):
 		return(("{} {}'s savings account").format(self._firstName, self._lastName))
 
-
+	#add funds
 	def deposit(self, amt):
 		if self.validateMoney(amt):
+			#check if deposit is above minimum
 			if amt < 500:
 				raise Exception("Minimum deposit is $500")
 				return
@@ -129,17 +155,19 @@ class Savings(Account):
 
 
 class Checking(Account):
-	"""constructor to instantiate checking account object"""
-	#inherits account class, polymorphing withdraw method to handle overdraft fees
+	"""constructor to instantiate checking account object
+	inherits account class, polymorphing withdraw method to handle overdraft fees"""
 	def __init__(self, firstName, lastName, SSN, balance = 0):
 		super().__init__(firstName, lastName, SSN, balance)
 		
-	
+	#override str to something almost meaningful
 	def __str__(self):
 		return(("{} {}'s checking account").format(self._firstName, self._lastName))
 	
+	#deduct funds
 	def withdraw(self, amt):
 		if self.validateMoney(amt):
+			#if withdrawal results in negative value apply 20 overdraft fee
 			if self._balance - amt < 0:
 				self._balance -= (amt + 20)
 			else:
@@ -148,9 +176,9 @@ class Checking(Account):
 
 		
 
-
+#################################################
 ##Main
-
+#################################################
 
 #instantiate
 Customer1 = ("John", "Doe", "123456789")
@@ -159,20 +187,38 @@ savings1 = Savings(Customer1[0], Customer1[1], Customer1[2], 1000)
 savings2 = Savings(Customer1[0], Customer1[1], Customer1[2], 13000)
 checking1 = Checking(Customer1[0], Customer1[1], Customer1[2], 1000)
 checking2 = Checking(Customer2[0], Customer2[1], Customer2[2])
-# print(Customer1)
-# print(Customer1.getFirstName)
+
 #display
 print(savings1)
 print(checking1)
-#check balance
-print(savings1.checkBalance)
-print(checking1.checkBalance)
 
+#check balance
+print("savings1 balance: " + str(savings1.checkBalance))
+print("checking1 balance: " + str(checking1.checkBalance))
+print("savings2 balance: " + str(savings2.checkBalance))
+print("checking2 balance: " + str(checking2.checkBalance))
+
+
+#deposit
+savings1.deposit(600) #change to <500 to get an error
+checking2.deposit(100)
+print("Deposit 600 to savings1 and 100 to checking2")
+print("savings1 " + str(savings1.checkBalance))
+print("checking2 " + str(checking2.checkBalance))
+#withdraw
+print("withdraw 3000 from savings2 and 100 from checking1")
+savings2.withdraw(3000)
+checking1.withdraw(100)
+print("savings2 " + str(savings2.checkBalance))
+print("checking1 " + str(checking1.checkBalance))
 #transfer
 savings1.transfer(checking1, 100)
-print(savings1.checkBalance)
-print(checking1.checkBalance)
+print("Transfer 100 from savings1 to checking1")
+print("savings1 " + str(savings1.checkBalance))
+print("checking1 " + str(checking1.checkBalance))
 checking1.transfer(savings1, 600)
-print(savings1.checkBalance)
-print(checking1.checkBalance)
-print(Account.totalBalance(Customer1[2]))
+print("Transfer 600 from checking1 to savings1")
+print("savings1 " + str(savings1.checkBalance))
+print("checking1 " + str(checking1.checkBalance))
+#total balance
+print("totalBalance Customer1 " + str(Account.totalBalance(Customer1[2])))
