@@ -14,10 +14,10 @@ class Account():
 		"""constructor to instantiate account object"""
 
 		
-		self.firstName = firstName
-		self.lastName = lastName
-		self.SSN = SSN
-		self.balance = balance
+		self.setFirstName = firstName
+		self.setLastName = lastName
+		self.setSSN = SSN
+		self.setBalance = balance
 		#initialize customer in dict if new, or update if existing
 		Account._customers.setdefault(SSN,[]).append(self)
 	
@@ -47,15 +47,15 @@ class Account():
 	################################
 
 	@firstName.setter
-	def firstName(self, firstName):
+	def setFirstName(self, firstName):
 		self._firstName = firstName
 	
 	@lastName.setter
-	def lastName(self, lastName):
+	def setLastName(self, lastName):
 		self._lastName = lastName
 	
 	@SSN.setter
-	def SSN(self, SSN):
+	def setSSN(self, SSN):
 		#validate input
 		if len(SSN) != 9:
 			raise ValueError("Social security number must be in XXXXXXXXX format")
@@ -63,11 +63,23 @@ class Account():
 			self._SSN = SSN
 
 	@balance.setter
-	def balance(self, amt):
+	def setBalance(self, amt):
 		self._balance = amt
 
 	#getters
 	#############################
+	@firstName.getter
+	def getFirstName(self):
+		return self._firstName
+
+	@lastName.getter
+	def getLastName(self):
+		return self._lastName
+
+	@SSN.getter
+	def getSSN(self):
+		return self._SSN
+
 	@balance.getter
 	def checkBalance(self):
 		return(self._balance)
@@ -78,12 +90,12 @@ class Account():
 	#deduct funds from account
 	def withdraw(self, amt):
 		if self.validateMoney(amt):
-			self._balance-=amt
+			self.setBalance-=amt
 
 	#add funds to account
 	def deposit(self, amt):
 		if self.validateMoney(amt):
-			self._balance+=amt
+			self.setBalance+=amt
 
 	def validateMoney(self, amt):
 		#validate monetary values are numeric and positive
@@ -102,9 +114,10 @@ class Account():
 		#transfer funds between accounts
 		#usage:
 		#   origin.transfer(destination, amount)
-		if self.validateMoney(amt):
+		if self.validateMoney(amt) and self.validateMoney(self.checkBalance - amt):
 			self.withdraw(amt)
 			target.deposit(amt)
+		
 	
 	#get the total balance for all accounts for a specified customer
 	def totalBalance(SSN):
@@ -114,6 +127,10 @@ class Account():
 		for account in accounts:
 			total += float(account.checkBalance)
 		return total
+
+	#override str to something almost meaningful
+	def __str__(self):
+		return(("{} {}'s {} account").format(self.getFirstName, self.getLastName, self.__class__.__name__))
 
 
 class Savings(Account):
@@ -126,13 +143,11 @@ class Savings(Account):
 			print("Account not opened")
 			return
 		else:
-			self.balance = balance
+			self.setBalance = balance
 			"""inherit Account class init"""
 		super().__init__(firstName, lastName, SSN, balance)
 
-	#override str to something almost meaningful
-	def __str__(self):
-		return(("{} {}'s savings account").format(self._firstName, self._lastName))
+
 
 	#add funds
 	def deposit(self, amt):
@@ -142,16 +157,16 @@ class Savings(Account):
 				raise Exception("Minimum deposit is $500")
 				return
 			else:
-				self._balance += amt
+				self.setBalance += amt
 
 
 	def withdraw(self, amt):
 		if self.validateMoney(amt):
-			if self._balance - amt < 500:
+			if self.setBalance - amt < 500:
 				raise Exception("Savings cannot be less than $500")
 				return
 			else:
-				self._balance-=amt
+				self.setBalance-=amt
 
 
 class Checking(Account):
@@ -160,18 +175,15 @@ class Checking(Account):
 	def __init__(self, firstName, lastName, SSN, balance = 0):
 		super().__init__(firstName, lastName, SSN, balance)
 		
-	#override str to something almost meaningful
-	def __str__(self):
-		return(("{} {}'s checking account").format(self._firstName, self._lastName))
 	
 	#deduct funds
 	def withdraw(self, amt):
 		if self.validateMoney(amt):
 			#if withdrawal results in negative value apply 20 overdraft fee
-			if self._balance - amt < 0:
-				self._balance -= (amt + 20)
+			if self.setBalance - amt < 0:
+				self.setBalance -= (amt + 20)
 			else:
-				self._balance -= amt
+				self.setBalance -= amt
 
 
 		
@@ -188,9 +200,9 @@ savings2 = Savings(Customer1[0], Customer1[1], Customer1[2], 13000)
 checking1 = Checking(Customer1[0], Customer1[1], Customer1[2], 1000)
 checking2 = Checking(Customer2[0], Customer2[1], Customer2[2])
 
-#display
+#display __str__
 print(savings1)
-print(checking1)
+print(checking2)
 
 #check balance
 print("savings1 balance: " + str(savings1.checkBalance))
